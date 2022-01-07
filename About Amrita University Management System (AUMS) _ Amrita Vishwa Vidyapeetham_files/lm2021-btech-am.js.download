@@ -1,0 +1,244 @@
+//=++Amrita.edu========
+
+
+var course = "ambtech20";
+var url_new="https://aoap.amrita.edu/lead-manager/index/create-btech-lead";
+
+if (typeof jQuery == 'undefined') {
+    var script = document.createElement('script');
+    script.type = "text/javascript";
+    script.src = "https://code.jquery.com/jquery-3.2.1.min.js";
+    script.onload = function () {
+        var jQuery = window.jQuery;
+        createFrame();
+    };
+    document.getElementsByTagName('head')[0].appendChild(script);
+} else {
+    createFrame();
+}
+
+function checkBrow()
+{
+	
+     // Opera 8.0+
+    var isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+
+    // Firefox 1.0+
+    var isFirefox = typeof InstallTrigger !== 'undefined';
+
+    // Safari 3.0+ "[object HTMLElementConstructor]"
+   /* var isSafari = /constructor/i.test(window.HTMLElement) || (function (p) {
+        return p.toString() === "[object SafariRemoteNotification]";
+    })(!window['safari'] || (typeof safari !== 'undefined' && safari.pushNotification));*/
+    var isSafari = /constructor/i.test(window.HTMLElement)|| (!window.safari||"undefined"!=typeof safari&&safari.pushNotification).toString();
+
+    // Internet Explorer 6-11
+    var isIE = /*@cc_on!@*/false || !!document.documentMode;
+
+    // Edge 20+
+    var isEdge = !isIE && !!window.StyleMedia;
+
+    // Chrome 1+
+    //var isChrome = !!window.chrome && !!window.chrome.webstore;
+	//alert(isChrome)
+	//var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+	var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+	//	alert(isChrome)
+
+    // Blink engine detection
+    var isBlink = (isChrome || isOpera) && !!window.CSS;
+    if (isFirefox || isChrome || isOpera || isEdge || isSafari) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function createFrame() {
+    var host = location.hostname;
+    var host1 = location.hostname;
+    var path = location.href;
+    var path1 = location.href;
+    s = 0;
+    var source_flag = 0;
+    if (path.indexOf("utm_source") > 0 || path.indexOf("utm_medium") > 0 || path.indexOf("utm_campaign") > 0 || path.indexOf("utm_term") > 0 || path.indexOf("utm_content") > 0 || path.indexOf("gclid") > 0) {
+        s = 1;
+        source_flag=1;
+    }
+
+    if (checkBrow()) {
+        var fu = new URL(path);
+    } else {
+        var fu = parseURL(path);
+    }
+    var url_param = fu.search.replace('?', '').split('&'); //window.location
+    var source_parm = '';
+    var url_final_param = '';
+    if (url_param != '') {
+        for (i = 0; i < url_param.length; i++) {
+            if (url_final_param != '') url_final_param = url_final_param + "||";
+            var ParamKeys = url_param[i].split('=');
+            if (ParamKeys[0].toLowerCase() == "utm_source" || ParamKeys[0].toLowerCase() == "utm_medium" || ParamKeys[0].toLowerCase() == "utm_campaign"|| ParamKeys[0].toLowerCase() == "utm_term"|| ParamKeys[0].toLowerCase() == "utm_content")
+                source_parm = source_parm + ParamKeys[0] + "@@" + ParamKeys[1];
+            if ((ParamKeys[0].toLowerCase() == 'utm_placement') ||
+                (ParamKeys[0].toLowerCase() == 'utm_keyword')) {
+                url_final_param = url_final_param + ParamKeys[0] + "@@" + url_param[i].replace(ParamKeys[0] + '=', "");
+            } else {
+                url_final_param = url_final_param + ParamKeys[0] + "@@" + ParamKeys[1];
+            }
+        }
+    }
+
+    if (source_parm != "") {
+        var source_parm_old = readCookie("source_parm");
+        if (source_parm_old == "") {
+            var now = new Date();
+            var minutes = 30;
+            now.setTime(now.getTime() + (minutes * 60 * 1000));
+            if (host != "localhost") {
+                host1 = (host1.match(/([^.]+)\.\w{2,3}(?:\.\w{2})?$/) || [])[0];
+            }
+            source_flag = 1;
+            document.cookie = "source_parm=" + source_parm + ";domain=." + host1 + ";expires=" + now.toUTCString() + "; path=/";
+        }
+
+    }
+
+
+    /*url_track=url_new+'?param1=' + url_final_param + '&course='+course+'&s=' + source_flag;
+    //url_track = 'http://localhost/lead_manager/index/create-lead?param1=' + url_final_param + "&course=ambtech20&s=" + source_flag;
+    cont = jQuery(document.body);
+
+    try {
+        jQuery('<iframe >', {
+            src: url_track,
+            allow: "sync-xhr *",
+            frameborder: 0,
+            height: '500px',
+            width: '380px',
+            scrolling: "no",
+            id: "pop_frame"
+        }).appendTo(jQuery(cont));
+    } catch (e) { }
+
+    jQuery("#pop_frame").css({
+        "z-index": "100000",
+        "position": "fixed",
+        "bottom": "-24px",
+        "right": "20px",
+        "width": "350px"
+    }); */
+    referrer="";
+    if (document.referrer && document.referrer != "")
+    {
+		referrer = document.referrer;
+	}
+    url_track=url_new+'?param1=' + url_final_param +'&course='+course+'&s=' + source_flag+'&type=inline&head=true&referrer='+referrer;
+    //url_track = 'http://localhost/lead_manager/index/create-lead?param1=' + url_final_param + "&course=ambtech20&s=" + source_flag+"&type=inline";
+    jQuery("#enquire_now").html("");
+    cont = jQuery("#enquire_now");
+    try {
+        jQuery('<iframe >', {
+            src: url_track,
+            allow: "sync-xhr *",
+            frameborder: 0,
+            height: '600px',
+            width: '100%',
+            scrolling: "yes",
+            id: "pop_frame1"
+        }).prependTo(jQuery(cont));
+    } catch (e) {
+    }
+    /*
+     url_track=url_new+'?param1=' + url_final_param +'&course='+course+'&s=' +'&type=middle';
+    //url_track = 'http://localhost/lead_manager/index/create-lead?param1=' + url_final_param + "&course=ambtech20&s=" + source_flag+"&type=inline";
+    jQuery("#enquire-now").html("");
+    cont = jQuery("#enquire-now");
+    try {
+        jQuery('<iframe >', {
+            src: url_track,
+            allow: "sync-xhr *",
+            frameborder: 0,
+            height: '430px',
+            width: '100%',
+            scrolling: "no",
+            id: "pop_frame1"
+        }).prependTo(jQuery(cont));
+    } catch (e) {
+    }
+   // closeForm();
+*/
+
+}
+
+function readCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+    }
+    return '';
+}
+
+function closeForm() {
+    jQuery("#pop_frame").height("80px")
+    jQuery("#pop_frame").width("350px")
+}
+
+function openForm() {
+    jQuery("#pop_frame").height("500px")
+    jQuery("#pop_frame").width("350px")
+}
+function reloadPage() {
+    //alert('');
+    document.location.reload(true);
+}
+
+function makePopUp()
+{	
+	doModal();
+}
+
+if (window.addEventListener) {
+    window.addEventListener("message", onMessage, false);
+} else if (window.attachEvent) {
+    window.attachEvent("onmessage", onMessage, false);
+}
+
+function onMessage(event) {
+    // Check sender origin to be trusted
+    if (event.origin !== "https://aoap.amrita.edu") return;
+
+    var data = event.data;
+    if (typeof(window[data.func]) == "function") {
+        window[data.func].call(null, data.message);
+    }
+}
+
+function doModal()
+{
+	//alert('');
+	var    html='<div id="exampleModalLive" class="modal fade show" tabindex="-1" role="dialog"  style="display:none">';
+	html+='<div class="modal-dialog" role="document"><div class="modal-content">';
+	html+='<div class="modal-header"><h5 class="modal-title" id="exampleModalLiveLabel">B.Tech Admission 2021</h5>';
+	html+='<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>';
+	html+='</div><div class="modal-body"><p>We are pleased to see your interest in B.Tech program offered by Amrita School of Engineering.</p><p>A verification email has been sent to your registered email id, please verify to proceed further</p></div>';
+	html+='<div class="modal-footer"><button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="reloadPage();">Close</button>';
+	html+='<button type="button" class="btn btn-primary" onclick="reloadPage();">OK</button></div>';
+	html+='</div></div></div>';  // modalWindow
+    jQuery(document.body).append(html);
+    jQuery("#exampleModalLive").modal();
+    
+   // document.location.href = "https://admissions.amrita.edu/btech-thank-you/";
+
+}
+
+function hideModal()
+{
+    // Using a very general selector - this is because $('#modalDiv').hide
+    // will remove the modal window but not the mask
+    jQuery('.modal.in').modal('hide');
+}
+
