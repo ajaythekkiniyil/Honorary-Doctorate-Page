@@ -19,8 +19,8 @@ var data = {
 };
 
 var productSettings = {
-  "AW-588095161":{"preAutoPii":true},
-  "AW-1003612182":{"preAutoPii":true}
+  "AW-1003612182":{"preAutoPii":true},
+  "AW-588095161":{"preAutoPii":true}
 };
 
 (function(){/*
